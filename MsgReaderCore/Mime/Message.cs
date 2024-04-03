@@ -528,7 +528,10 @@ public class Message
         if (file == null)
             throw new ArgumentNullException(nameof(file));
 
-        Save(file.OpenWrite());
+        using (var msgStream = file.OpenWrite())
+        {
+            Save(msgStream);
+        }
     }
 
     /// <summary>
@@ -574,7 +577,10 @@ public class Message
         if (!file.Exists)
             throw new FileNotFoundException("Cannot load message from non-existent file", file.FullName);
 
-        return Load(file.OpenRead());
+        using(var msgStream = file.OpenRead())
+        {
+            return Load(msgStream);
+        }
     }
 
     /// <summary>
